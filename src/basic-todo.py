@@ -8,6 +8,11 @@ import os
 # Import functions of your code
 from functions import swap
 
+
+# -----GLOBAL VARIABLES-----
+__path__ = os.getcwd()
+__system__ = platform.system()
+
 # -----READ BASIC.INI-----
 config = cfg.ConfigParser()
 config.read(f'{__path__}/config/basic.ini')
@@ -15,14 +20,9 @@ meta = config['DEFAULT']
 widget = config['widget.SIZES']
 theme = config['system.THEME']
 font = config['FONT']
-
-# -----GLOBAL VARIABLES-----
-__path__ = os.getcwd()
-__system__ = platform.system()
-__theme__ = meta['theme']
+__theme__ = meta['theme'] # global variable
 
 # -----REFER TO OUR FUNCTIONS-----
-system_theme = theme_identification.identification()
 settings_image = swap.image_swap()
 
 
@@ -49,10 +49,12 @@ class MainWindow(ctk.CTk):
             if widget.winfo_class() == 'Frame':
 
                 if __theme__ == 'light': 
-                    widget
+                    widget.configure(fg_color=f'#{theme['light-foreground-btn']}',
+                                    hover_color=f'#{theme['light-hover-btn']}', text_color='#000000')
+                    self.configure(fg_color=f'#{theme['light-foreground']}') 
                 if __theme__ == 'dark':
                     widget.configure(fg_color=f'#{theme['dark-foreground-btn']}',
-                                    hover_color=f'#{theme['dark-hover-btn']}')
+                                    hover_color=f'#{theme['dark-hover-btn']}', text_color='#ffffff')
                     self.configure(fg_color=f'#{theme['dark-foreground']}')   
 
 
