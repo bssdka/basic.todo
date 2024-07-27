@@ -6,21 +6,23 @@ import platform
 import os
 
 # Import functions of your code
-import swap
-
-# -----GLOBAL VARIABLES-----
-__path__ = os.getcwd()
-__system__ = platform.system()
+from functions import swap
 
 # -----READ BASIC.INI-----
 config = cfg.ConfigParser()
 config.read(f'{__path__}/config/basic.ini')
 meta = config['DEFAULT']
-debug = config['DEBUGGING']
 widget = config['widget.SIZES']
+theme = config['system.THEME']
 font = config['FONT']
 
+# -----GLOBAL VARIABLES-----
+__path__ = os.getcwd()
+__system__ = platform.system()
+__theme__ = meta['theme']
+
 # -----REFER TO OUR FUNCTIONS-----
+system_theme = theme_identification.identification()
 settings_image = swap.image_swap()
 
 
@@ -36,11 +38,22 @@ class MainWindow(ctk.CTk):
         mw_btn, mh_btn, ss_btn = int(widget['width_main_btn']), int(widget['height_main_btn']), int(widget['size_settings_btn'])
 
         # -----CREATINGE AND POSITIONING WIDGETS-----
-        create_node_btn = ctk.CTkButton(self, width=mw_btn, height=mh_btn, text="CREATE", font=self.__font__,
-                                        ).grid(row=0, column=0, padx=25, pady=25)
-        edit_node_btn = ctk.CTkButton(self, width=mw_btn, height=mh_btn, text="EDIT", font=self.__font__,
-                                        ).grid(row=0, column=1, pady=25)
+        create_node_btn = ctk.CTkButton(self, width=mw_btn, height=mh_btn, text="CREATE", font=self.__font__,).grid(row=0, column=0, padx=25, pady=25)
+        edit_node_btn = ctk.CTkButton(self, width=mw_btn, height=mh_btn, text="EDIT", font=self.__font__,).grid(row=0, column=1, pady=25)
         settings_btn = ctk.CTkButton(self, image=settings_image, width=ss_btn, height=ss_btn, text="").grid(row=0, column=2, padx=25, pady=25)
+
+        self.build_theme()
+
+    def build_theme(self):
+        for widget in self.winfo_children():
+            if widget.winfo_class() == 'Frame':
+
+                if __theme__ == 'light': 
+                    widget
+                if __theme__ == 'dark':
+                    widget.configure(fg_color=f'#{theme['dark-foreground-btn']}',
+                                    hover_color=f'#{theme['dark-hover-btn']}')
+                    self.configure(fg_color=f'#{theme['dark-foreground']}')   
 
 
 
@@ -50,7 +63,5 @@ if __name__ == '__main__':
 
     # -----CONFIGURATION APP-----
     app.title(f'{meta['title']} {meta['version']}')
-    ctk.set_appearance_mode(debug['debug_appearance_mode'])
-    # ctk.set_default_color_theme(f'{__path__}/config/theme.json')
 
     app.mainloop()
