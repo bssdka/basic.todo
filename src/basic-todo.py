@@ -42,6 +42,8 @@ class MainWindow(ctk.CTk):
         edit_node_btn = ctk.CTkButton(self, width=mw_btn, height=mh_btn, text="EDIT", font=self.__font__,).grid(row=0, column=1, pady=25)
         settings_btn = ctk.CTkButton(self, image=settings_image, width=ss_btn, height=ss_btn, text="").grid(row=0, column=2, padx=25, pady=25)
 
+        scrollfrane = ctk.CTkScrollableFrame(self)
+
         self.build_theme()
 
     def build_theme(self):
